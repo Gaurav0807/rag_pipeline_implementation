@@ -1,0 +1,149 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="RAG Anti-Hallucination Pipeline" id="rag-hallucination-pipeline">
+    <mxGraphModel dx="2166" dy="939" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=24;fontStyle=1;fontColor=#1a1a2e;" value="7-Layer Defense Against RAG Hallucinations" vertex="1">
+          <mxGeometry height="40" width="700" x="450" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontColor=#666666;" value="(Why Knowledge Base Alone Isn&#39;t Enough)" vertex="1">
+          <mxGeometry height="30" width="600" x="500" y="55" as="geometry" />
+        </mxCell>
+        <mxCell id="user" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;fontStyle=1;" value="👤 User Query" vertex="1">
+          <mxGeometry height="50" width="160" x="720" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow1" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#333333;" target="hybrid_search">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="retrieval_layer" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;dashed=1;" value="" vertex="1">
+          <mxGeometry height="220" width="1360" x="120" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="retrieval_label" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1;fontColor=#b45309;" value="LAYER 1: RETRIEVAL" vertex="1">
+          <mxGeometry height="20" width="200" x="130" y="185" as="geometry" />
+        </mxCell>
+        <mxCell id="hybrid_search" parent="1" style="swimlane;horizontal=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;fontStyle=1;startSize=40;" value="③ Hybrid Search + ⑤ Metadata Filter" vertex="1">
+          <mxGeometry height="170" width="520" x="140" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="vector_search" parent="hybrid_search" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="🔍 Vector Search&#xa;(Semantic)&#xa;&#xa;+ filter: {doc_type,&#xa;date, tags}" vertex="1">
+          <mxGeometry height="130" width="140" x="50" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="keyword_search" parent="hybrid_search" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="🔎 Keyword Search&#xa;(BM25/Exact)&#xa;&#xa;+ filter: {doc_type,&#xa;date, tags}" vertex="1">
+          <mxGeometry height="130" width="140" x="210" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="metadata_inside" parent="hybrid_search" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" value="⑤ Pre-Filter&#xa;📅 Date&#xa;📁 Type&#xa;🏷️ Tags" vertex="1">
+          <mxGeometry height="110" width="90" x="370" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="rrf" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;fontStyle=0;" value="RRF&lt;br&gt;(Reciprocal Rank Fusion)&lt;br&gt;&lt;br&gt;score = 1/(k + rank)&lt;br&gt;&lt;br&gt;Combines Vector + Keyword&lt;br&gt;No extra LLM call needed" vertex="1">
+          <mxGeometry height="140" width="180" x="720" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="confidence" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;fontStyle=0;" value="Confidence Score&lt;br&gt;&lt;br&gt;Threshold: 0.5 - 0.7&lt;br&gt;&lt;br&gt;if score &amp;lt; threshold:&lt;br&gt;   reject chunk&lt;br&gt;else:&lt;br&gt;   include chunk" vertex="1">
+          <mxGeometry height="140" width="170" x="960" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="chunks" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontStyle=1;" value="📚 Retrieved Chunks&#xa;(Filtered &amp; Ranked)" vertex="1">
+          <mxGeometry height="60" width="160" x="1200" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow2" edge="1" parent="1" source="hybrid_search" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#333333;" target="rrf">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow3" edge="1" parent="1" source="rrf" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#333333;" target="confidence">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow4" edge="1" parent="1" source="confidence" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#333333;" target="chunks">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="generation_layer" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;dashed=1;" value="" vertex="1">
+          <mxGeometry height="180" width="1360" x="120" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="generation_label" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1;fontColor=#2e7d32;" value="LAYER 2: GENERATION" vertex="1">
+          <mxGeometry height="20" width="200" x="130" y="435" as="geometry" />
+        </mxCell>
+        <mxCell id="citation" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" value="&amp;nbsp;Source Attribution&lt;br&gt;&lt;br&gt;Prompt: &quot;Always cite [Source X]&quot;&lt;br&gt;&lt;br&gt;No citation = No claim&lt;br&gt;&lt;br&gt;Creates accountability" vertex="1">
+          <mxGeometry height="120" width="200" x="160" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="temperature" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" value="⑥ Temperature Control&#xa;&#xa;Factual Q&amp;A: 0.0 - 0.3&#xa;Creative: 0.7 - 1.0&#xa;&#xa;RAG Default: 0.1&#xa;(Deterministic, grounded)" vertex="1">
+          <mxGeometry height="120" width="200" x="400" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="llm" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontStyle=1;" value="🤖 Claude LLM&#xa;(AWS Bedrock)&#xa;&#xa;anthropic.claude-3-haiku&#xa;or claude-3-sonnet" vertex="1">
+          <mxGeometry height="120" width="200" x="660" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="initial_answer" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" value="📝 Initial Answer&#xa;(May have hallucinations)" vertex="1">
+          <mxGeometry height="80" width="180" x="920" y="490" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow5" edge="1" parent="1" source="chunks" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#333333;" target="citation">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1280" y="420" />
+              <mxPoint x="260" y="420" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow6" edge="1" parent="1" source="citation" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#333333;" target="temperature">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow7" edge="1" parent="1" source="temperature" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#333333;" target="llm">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow8" edge="1" parent="1" source="llm" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#333333;" target="initial_answer">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="verification_layer" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;strokeWidth=2;dashed=1;" value="" vertex="1">
+          <mxGeometry height="200" width="1360" x="120" y="640" as="geometry" />
+        </mxCell>
+        <mxCell id="verification_label" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1;fontColor=#b91c1c;" value="LAYER 3: VERIFICATION &amp; CORRECTION" vertex="1">
+          <mxGeometry height="20" width="300" x="130" y="645" as="geometry" />
+        </mxCell>
+        <mxCell id="self_correction" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" value="⑦ Self-Correction&#xa;&#xa;Step 1: Generate answer&#xa;Step 2: Verify against sources&#xa;Step 3: Correct if needed&#xa;&#xa;&quot;Is this answer supported?&quot;" vertex="1">
+          <mxGeometry height="140" width="250" x="160" y="680" as="geometry" />
+        </mxCell>
+        <mxCell id="verify_check" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;align=left;" value="🔍 Verification Check&#xa;&#xa;{&#xa;  &quot;verified&quot;: true/false,&#xa;  &quot;confidence&quot;: 0-1,&#xa;  &quot;issues&quot;: [...]&#xa;}" vertex="1">
+          <mxGeometry height="140" width="200" x="460" y="680" as="geometry" />
+        </mxCell>
+        <mxCell id="decision" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontStyle=1;" value="Verified?" vertex="1">
+          <mxGeometry height="70" width="100" x="720" y="715" as="geometry" />
+        </mxCell>
+        <mxCell id="correction" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" value="🔧 Correct Answer&#xa;&#xa;Remove unsupported claims&#xa;Rewrite using only sources" vertex="1">
+          <mxGeometry height="80" width="180" x="880" y="680" as="geometry" />
+        </mxCell>
+        <mxCell id="final_answer" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontStyle=1;" value="✅ Final Answer&#xa;(Verified &amp; Grounded)" vertex="1">
+          <mxGeometry height="70" width="180" x="1120" y="715" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow9" edge="1" parent="1" source="initial_answer" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#333333;" target="self_correction">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1010" y="620" />
+              <mxPoint x="285" y="620" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow10" edge="1" parent="1" source="self_correction" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#333333;" target="verify_check">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow11" edge="1" parent="1" source="verify_check" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#333333;" target="decision">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow12" edge="1" parent="1" source="decision" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#b91c1c;fontColor=#b91c1c;" target="correction" value="No">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow13" edge="1" parent="1" source="decision" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#2e7d32;fontColor=#2e7d32;" target="final_answer" value="Yes">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="770" y="800" />
+              <mxPoint x="1040" y="800" />
+              <mxPoint x="1040" y="750" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow14" edge="1" parent="1" source="correction" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#333333;" target="final_answer">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="response" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontStyle=1;" value="👤 Response to User&#xa;&#xa;Answer + Sources + Confidence" vertex="1">
+          <mxGeometry height="70" width="180" x="1120" y="880" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow15" edge="1" parent="1" source="final_answer" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#333333;" target="response">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
